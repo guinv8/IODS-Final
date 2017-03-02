@@ -1,5 +1,7 @@
 ---
 title: "Final Assignment"
+author: Guilherme Varro (guilherme.varro@helsinki.fi)
+date: March 07 2017
 output:
   html_document:
     theme: flatly
@@ -11,4 +13,19 @@ output:
     code_folding: hide
 ---
 
-Temporary Text
+Research Question I am exploring:
+
+Link to Data Wrangling Script:
+
+Description of your data and its variables:
+
+Visually clear and interesting explorations of the variables of interest in the data, from the point of view of your research question. Include interpretations of the distributions and relationships of the variables. Use captions to draw the reader's focus on the interesting parts of your tables and graphics. 
+
+Brief description of the method you are using in your own words
+
+Presentation of the results of your analysis including visualizations and summaries and a thorough interpretation of the results including a validation analysis of the method. 
+
+Conclusions and discussion
+
+An 'abstract' at the beginning of the page with a summary of your analysis
+

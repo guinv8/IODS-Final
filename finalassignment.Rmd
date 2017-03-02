@@ -1,0 +1,113 @@
+---
+title: "Final Assignment Title"
+output:
+  html_document:
+    code_folding: hide
+---
+
+#Exploring the Human Development Index in Latin America and the Caribbean 
+
+**The dataset *Human*, which is being used for the purpose of this statistical analysis was gathered and processed by the UNDP (United Nations Development Program).**
+**It is the objective of this report to analyse the data through R, with a concise explanation of each step and codes used.**
+
+**1) Structure of the Data**
+
+The *Human* data consists of 155 observations within 17 variables. However, for this exercise, I wish to analyse only those countries located in **Latin America and the Caribbean**. The adapted dataset consisting solely of Latin American and Caribbean countries has a total of *28 observations*, including the average regional number, visualized through *11 variables*: HDI (Human Development Index), Expectancy of Life, Expected Education, GNI (Gross National Product), Maternal Mortality, Adolescence Birth Rate, Parliamentary Representation Rate, Female Secondary Education, Male Secondary Education, Female Labor and Male Labor.
+
+```{r, echo=TRUE}
+library(ggplot2)
+setwd("C:/Users/Guilherme/Desktop/University of Helsinki/2016-2017/Period 2/Term 3/Open Data Science/IODS Final/IODS-Final")
+latam <- read.csv("humanfinal.csv", header=TRUE, row.names = 1)
+dim(latam)
+str(latam)
+summary(latam)
+```
+
+Looking at the matrix and the plots below, we can identify and verify the distribution and the relationship between the variables available. For visualization purposes, let's take a closer look at the plot Correlation Matrix. Taking the variable crime as a reference, it is possible to see its correlation with other variables, such as access to main highways (rad) and residential tax rates (tax). These variables, according to the data, are strictly correlated with the high crime rates in Boston. This data has interesting geographical data, as you can clearly see the effects of distance and access to the city infrastructure on several issues, such as crime rate, pollution, and number of industries. 
+
+```{r, echo=TRUE}
+library(corrplot)
+pairs(latam)
+cor_matrix<-cor(latam) 
+corrplot(cor_matrix, method="circle", type= "upper", cl.pos="b", tl.pos="d", tl.cex=0.6, mar = c(3,0,2,0), title= "Correlation Matrix")
+
+```
+
+Classifying the HDI
+```{r, echo=TRUE}
+hdi <- cut(latam$HDI, breaks = c(0, 0.550, 0.699, 0.799, 1.000), include.lowest = TRUE, label = c("low", "medium", "high", "very_high"))
+table(hdi)
+hdi
+```
+
+LDA
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+latam_scaled <- scale(latam)
+summary(latam_scaled)
+latam_scaled <- as.data.frame(latam_scaled)
+latam_scaled <- cbind(latam_scaled, hdi)
+library(MASS)
+library(dplyr)
+lda.fit <- lda(hdi ~. - HDI, data=latam_scaled)
+lda.fit
+lda.arrows <- function(x, myscale = 1, arrow_heads = 0.1, color = "black", tex = 0.75, choices = c(1,2)){
+  heads <- coef(x)
+  arrows(x0 = 0, y0 = 0, 
+         x1 = myscale * heads[,choices[1]], 
+         y1 = myscale * heads[,choices[2]], col=color, length = arrow_heads)
+  text(myscale * heads[,choices], labels = row.names(heads), 
+       cex = tex, col=color, pos=3)
+}
+classes <- as.numeric(latam_scaled$hdi)
+plot(lda.fit, dimen = 2, col=classes, pch=classes)
+lda.arrows(lda.fit, myscale = 2, arrow_heads = 0.1, color = "black", tex = 0.75, choices = c(1,2))
+```
+
+
+Multiple Regression
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+MultipleRegression <- lm(HDI ~ ., data = latam)
+MultipleRegression
+summary(MultipleRegression)
+
+MultipleRegression2 <- lm(HDI ~ . - Male.Edu, data = latam)
+MultipleRegression2
+summary(MultipleRegression2)
+
+MultipleRegression3 <- lm(HDI ~ . - (Male.Edu + Mat.Mort), data = latam)
+MultipleRegression3
+summary(MultipleRegression3)
+
+MultipleRegression4 <- lm(HDI ~ . - (Male.Edu + Mat.Mort + Adol.Birth), data = latam)
+MultipleRegression4
+summary(MultipleRegression4)
+
+MultipleRegression5 <- lm(HDI ~ . - (Male.Edu + Mat.Mort + Adol.Birth + Parl), data = latam)
+MultipleRegression5
+summary(MultipleRegression5)
+
+MultipleRegression6 <- lm(HDI ~ . - (Male.Edu + Mat.Mort + Adol.Birth + Parl + Female.Labor), data = latam)
+MultipleRegression6
+summary(MultipleRegression6)
+
+MultipleRegression7 <- lm(HDI ~ . - (Male.Edu + Mat.Mort + Adol.Birth + Parl + Female.Labor + Male.Labor), data = latam)
+MultipleRegression7
+summary(MultipleRegression7)
+
+```
+
+K Means
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+library(ggplot2)
+dist <- dist(latam_scaled)
+summary(dist)
+k_max <- 8
+twcss <- sapply(1:k_max, function(k){kmeans(dist, k)$tot.withinss})
+plot(1:k_max, twcss, type='b')
+km <-kmeans(dist, centers = 2)
+pairs(HDI~ (GNI + Exp.Edu + Exp.Life + Female.Edu),data=latam, col = km$cluster, pch = 1, title = "K-Means")
+
+```
