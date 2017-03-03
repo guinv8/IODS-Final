@@ -1,11 +1,24 @@
 ---
-title: "Final Assignment Title"
+title: "**Exploring the Human Development Index in Latin America and the Caribbean**"
 output:
   html_document:
     code_folding: hide
 ---
 
-#Exploring the Human Development Index in Latin America and the Caribbean 
+
+#Motivation
+
+Studying Latin America has direct relations to my own background and interests. As a Brazilian studying Development Studies in Finland, the development of my home-region has always been at the top of my mind. I've decided to use the skills acquired at the IODS course to eventually help me not only during my master's thesis research in Chile, but also throughout my degree. 
+
+The Human Data, collected by UNDP, holds interesting information on human development in Latin America and the Caribbean. Several of the variables can help us identify what really impacts the living conditions of millions of people in the region. I would like to use this opportunity to learn and discover new aspects of development in Latin America.
+
+#Research Question and Hypotheses
+
+The Human Development Index is the most used index to measure human development around the world. Divided into 4 groups (Low,Medium,High,Very High). The index includes several elements, such as: access to education, labor, economic power and health.The HDI index is not the only, and far from the best index, but still is the most used around the world. It lacks explanation in specific measures, such as inequality and freedom, but brings a decent overview of development through sectors.
+
+My objective in this research is to analyze what are the main components that influence a high HDI mark in Latin America and the Caribbean. The region counts with interesting and really diverse countries, ranging from low to high HDIs, different economic structures, different public spendings and different cultural habits. *My main hypotheses is regarding how education, specially female, impacts positively the human development index of these countries*. As a traditionally patriarcal region, poor female citizens still face several challenges when trying to pursue or access education. **I believe that those countries that have a high female education level, count with a higher HDI index, as wel with a more advanced economic structure (GNI)**. I would like to support this hypotheses with economic elements, such as GNI per capita, proving that more equal and prosperous countries have a higher HDI and female education level. 
+
+__________________________________________________________________________________________________________________________
 
 **The dataset *Human*, which is being used for the purpose of this statistical analysis was gathered and processed by the UNDP (United Nations Development Program).**
 **It is the objective of this report to analyse the data through R, with a concise explanation of each step and codes used.**
@@ -14,39 +27,92 @@ output:
 
 The *Human* data consists of 155 observations within 17 variables. However, for this exercise, I wish to analyse only those countries located in **Latin America and the Caribbean**. The adapted dataset consisting solely of Latin American and Caribbean countries has a total of *28 observations*, including the average regional number, visualized through *11 variables*: HDI (Human Development Index), Expectancy of Life, Expected Education, GNI (Gross National Product), Maternal Mortality, Adolescence Birth Rate, Parliamentary Representation Rate, Female Secondary Education, Male Secondary Education, Female Labor and Male Labor.
 
+It is clear the distance between the first HDI of the Region, held by Argentina, and the last, held by Haiti. As I've mentioned before, the region is known for its disparities. Let's take a look at the Expected Education, by years, the difference between the first and the last country is almost 100%. On the economic side, the same conclusion can be taken, the richest and more equal are very distant from the poorest and unequal. The Mean represent the average numbers for the Region, somehow close to the reality of most of the countries in Latin America and the Caribbean.
+
 ```{r, echo=TRUE}
 library(ggplot2)
 setwd("C:/Users/Guilherme/Desktop/University of Helsinki/2016-2017/Period 2/Term 3/Open Data Science/IODS Final/IODS-Final")
 latam <- read.csv("humanfinal.csv", header=TRUE, row.names = 1)
-dim(latam)
 str(latam)
 summary(latam)
 ```
 
-Looking at the matrix and the plots below, we can identify and verify the distribution and the relationship between the variables available. For visualization purposes, let's take a closer look at the plot Correlation Matrix. Taking the variable crime as a reference, it is possible to see its correlation with other variables, such as access to main highways (rad) and residential tax rates (tax). These variables, according to the data, are strictly correlated with the high crime rates in Boston. This data has interesting geographical data, as you can clearly see the effects of distance and access to the city infrastructure on several issues, such as crime rate, pollution, and number of industries. 
+______________
+
+**2) A First View of the Data**
+
+Looking at the matrix and the plots below, we can identify and verify the distribution and the relationship between the variables available. The first plot is an overall dimension of the data, how the 11 variables are positioned.  For visualization purposes, since the first plot is rather polluted, let's focus on the second plot, the "Correlation Matrix".
+
+```{r, echo=TRUE}
+pairs(latam)
+```
+
+This plot offers us an extremely useful first view of our dataset. It shows the correlation of each variable, so how each one of the 11 variables relate positively (Blue color) or negatively (Red color), with eachother. Let's take a look at some of them. 
+
+- First, taking HDI as our reference, we can see how  Expected Education, for example, contributes positively to the HDI marks, which makes sense as more developed countries count with a higher level of education.
+
+- Second, let's take a look at the relationship between GNI per capita and Female and Male Education. Both are positive, no doubt, but the correlation between female education is a stronger than male education, showing that more rich and equal countries count with a higher female education level. 
+
+- Third, still looking at female education, it is interesting to see its negative correlation with maternal mortality and adolescent birth rate. It clearly points out the relationship between women's education and basic health care.
 
 ```{r, echo=TRUE}
 library(corrplot)
-pairs(latam)
 cor_matrix<-cor(latam) 
 corrplot(cor_matrix, method="circle", type= "upper", cl.pos="b", tl.pos="d", tl.cex=0.6, mar = c(3,0,2,0), title= "Correlation Matrix")
 
 ```
 
-Classifying the HDI
+________
+
+**3) Classifying the HDI**
+
+The Human Development Index was developed by the UNDP in 1990 by several development scientists who wished to change the focus of development from economics to people. Since then the index has suffered several changes, on its structure and methods to classify the countries, but finally in 2010, the UNDP set up fixed cut-lines to define the level in which the country would be classified. The cut lines would still be divided in four, but instead of being floating up and down accoridng to new reports, they would now be fixed intervals.
+
+- Very High Human Development: 0.800 and above
+- High Human Development: 0.700 - 0.799
+- Medium Human Development: 0.550 - 0.699
+- Low Human Development: Below 0.550
+
+In order to use the same patterns defined by the UN, I've categorized the 28 HDI's being analysed in this report within the 4 UNDP's classification groups. We can then see that among the Latin American countries, two are within the "very high" group, most of the countries are at the "high" human development group, seven are at the "medium" group, and only one is within the "low" HDI classification. This classification will be extremely important in our further analysis. 
+
 ```{r, echo=TRUE}
 hdi <- cut(latam$HDI, breaks = c(0, 0.550, 0.699, 0.799, 1.000), include.lowest = TRUE, label = c("low", "medium", "high", "very_high"))
 table(hdi)
-hdi
 ```
 
-LDA
+_______
+
+
+**4) Linear Discriminant Analysis**
+
+The first method in which I wish to analyse my data is through a Linear Discriminan Analysis (LDA). LDA is a classifying technique, which aims to categorize observations based on the variables that describe them. LDA is a technique that permits the researcher to study differences between two or more groups of objects, while considering th variables simultaneously. The idea of LDA is not to establish a group of objects, only to give interpretation on a set previously defined.
+
+LDA is a great method to analyse our data through the use of our recent created IDH classes. But first, a standardization of the data is necessary, since the dimensions of our variables are really different in nature and in form.
+
+*Standardizing the data*
+
+By using the standardization technique, it is possible to analyse all variables through the same comparison format. On the table below, it is possible to see all of our 11 variables being shown through the same form.
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 latam_scaled <- scale(latam)
 summary(latam_scaled)
 latam_scaled <- as.data.frame(latam_scaled)
 latam_scaled <- cbind(latam_scaled, hdi)
+```
+
+Finally, let's analyse the data through the LDA technique. We can clearly see that the four groups previously classified are the main core of this method. For obvious reasons, I've removed the HDI numbers, and left only the four categories, as I wish to see the data only through these four groups, at first. The table below is extremely useful to show us the powerful importance of the several dimensions within our data. Out of the three dimensions (LDA1,LDA2,LDA3), it is clear the importance and significance of the first dimension when explaining our data. According to the LDA method, the first dimension can explain almost 80% of all our data, while the second dimension, about 20%. The third dimension showed to be insignificant.
+
+Let's take a closer look at the variables themselves. The graph below shows, through the two most important dimensions identified before (LDA1 and LDA2), and through arrows, how each variable reacts through the dimensions, contributing or not to the final HDI classification. Very High Human Development countries are positioned on the right side of the graph, while Medium and High Development countries are scattered around the middle, and the only Low is isolated on the top left side. Overall we can assume that the more developed the country, the more far right it is located on the graph. Now let's take a look at the arrows, each one represents a different variable, and their direction shows its impact on bringing the country, or object, further right,left,up or down within the dimensions. Going back to our previous research question and hypotheses, and according to this LDA we can conclude that:
+
+- Expected Years of Education has direct relation with the development of these countries. We can assume that analysing the direction of the arrow, pointing towards the right, supporting the first dimension (LDA1) positively. We can see that a more extense education plays a big role on the development of these countries.
+
+-  GNI also has direct relation with the development. As assumed before, the richer and more equal the country, the higher its development. This variable also supports the first dimension positively.
+
+- Female Education does not have any relation with the first dimension, curiously, and in fact has opposite relation to male education on the second dimension. This method apparently doesn't support enough evidence to prove that female education does impact the HDI level.
+
+Since one of our variables doesn't seem to have a relation with our hypotheses, let's try other statistical method.
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
 library(MASS)
 library(dplyr)
 lda.fit <- lda(hdi ~. - HDI, data=latam_scaled)
@@ -64,41 +130,100 @@ plot(lda.fit, dimen = 2, col=classes, pch=classes)
 lda.arrows(lda.fit, myscale = 2, arrow_heads = 0.1, color = "black", tex = 0.75, choices = c(1,2))
 ```
 
+_________
 
-Multiple Regression
+**5) Multiple Regression**
+
+Regression analysis is a process for estimating the relationship between variables. Regressions can be simple or multiple, as it analyses one or more variables. The main idea of a multiple regression, for example, is to find the best independent variables that predict our dependent variable. In other words, how one or more variables predict one specific variable within our data frame. 
+This is extremely useful to find out how strong related the variables are.
+
+Let's try to find out, using our main dataset, what independent variables are the most relevant to predict our dependent variable HDI.
+
+*a) Multiple Regression 1: HDI x all variables*
+
+In order to analyse a regression, simple or multiple, it is necessary to understand some of the main elements of the analysis. On the table below, for example, we can notice that three vairables showed to be more significant to predict HDI: Exp. Life, Exp. Edu and GNI. However, even though our r� value, our coefficient of determination, is extremely positive (0.96), meaning that it is almost 100% correct that HDI's movements can be explained by these variables, we still have a lot of unecessary variables that don't necessarily predict our HDI level. Let's take them off one by one and see the changes in our model.
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 MultipleRegression <- lm(HDI ~ ., data = latam)
 MultipleRegression
 summary(MultipleRegression)
+```
 
+*b)Multiple Regression 2: HDI x all variables (except Male.Edu)*
+
+Male Education was the variable that least predicted our variable, according to the regression analysis. When we remove it from our analysis, it is interesting to notice the rising importance of Female Education to the prediction of HDI. Now we have four main variables that predict HDI movements. Our r� remains high, around 0.96, therefore out regression still predicts almost 100% of our dependent variable. Let's continue removing more variables to simplify our analysis.
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
 MultipleRegression2 <- lm(HDI ~ . - Male.Edu, data = latam)
 MultipleRegression2
 summary(MultipleRegression2)
+```
 
+*c)Multiple Regression 3: HDI x all variables (except Male.Edu and Mat. Mort)*
+
+Maternal Mortality rate was the next less important variable on our previous regression model, therefore I've decided to remove it for the next model. We can clearly see the impact on the variables, and in our r� value, reaching 0.97 now. 
+
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
 MultipleRegression3 <- lm(HDI ~ . - (Male.Edu + Mat.Mort), data = latam)
 MultipleRegression3
 summary(MultipleRegression3)
+```
 
+*d)Multiple Regression 4: HDI x all variables (except Male.Edu, Mat. Mort, Adol.Birth)*
+
+The next variable to be removed, according to its importance on the previous regression is Adolescent Birth Rate. Our previous variables still remain with the same importance, but now the analysis is less polluted. Our r� still remais at the same optimal level of 0.97.
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
 MultipleRegression4 <- lm(HDI ~ . - (Male.Edu + Mat.Mort + Adol.Birth), data = latam)
 MultipleRegression4
 summary(MultipleRegression4)
+```
 
+*e)Multiple Regression 5: HDI x all variables (except Male.Edu, Mat. Mort, Adol.Birth, Parl)*
+
+Parliamentary Representation was the next less important variable. Our analysis is almost complete.
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
 MultipleRegression5 <- lm(HDI ~ . - (Male.Edu + Mat.Mort + Adol.Birth + Parl), data = latam)
 MultipleRegression5
 summary(MultipleRegression5)
+```
 
+*e)Multiple Regression 6: HDI x all variables (except Male.Edu, Mat. Mort, Adol.Birth, Parl, Female.Labor)*
+
+When removing Female Labor, the variable Male Labor is not as relevant as in previous regression models. Our r� is lower but still extremely reliable.
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
 MultipleRegression6 <- lm(HDI ~ . - (Male.Edu + Mat.Mort + Adol.Birth + Parl + Female.Labor), data = latam)
 MultipleRegression6
 summary(MultipleRegression6)
+```
 
+*f)Multiple Regression 7: HDI x GNI, Exp.Life, Exp.Edu, Female.Edu*
+
+Finally, our final model. By removing the variable Male Labor, we get a clear model with all the variables that relate strongly with HDI. Surprisingly, three of these variables, Exp. Life, Exp.Edu and GNI match with the previous LDA statistic analysis, but even more interesting is the presence of Female Education as a strong correlant to HDI. This somehow supports our hypotheses that Female Education is indeed related to the HDI levels of a country. 
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
 MultipleRegression7 <- lm(HDI ~ . - (Male.Edu + Mat.Mort + Adol.Birth + Parl + Female.Labor + Male.Labor), data = latam)
 MultipleRegression7
 summary(MultipleRegression7)
-
 ```
+____________
 
-K Means
+**6) Distance between variables - K Means**
+
+Now that we have some information regarding the variables and its relationship with HDI, it would be interesting to see how the countries in the region are similar or not in each of the main identified variables. This would be interesting to see in which aspect countries are more homogeneous, and in which aspects they are more distinct. In order to do that, we need to perform a clustering technique that will separate each country according to the closest mean on each of the variables. We are doing that through the K-Means clustering method.
+
+The first step, however, is to find the optimal amount of centroids, or centers. This will define the amount of closest means to our variables. According to the first graph, in which we "try" the optimal amount of centroids, it is possible to see a great difference between two centroids and the rest. This bigger difference means that two centroids are probably the most effective way to cluster the data.
+
+After defining two centroids as the standard, we can finally see the k-means clustering for our four main variables: GNI, Exp. Edu, Exp. Life and Female Education. Each is characterized by two different colors, that consequently represent the two centers previously defined.Let's try to find some patterns.
+
+- By looking at the HDI x GNI plot, we can identify a form of uniformity related to the economic and equality level and the HDI index. High GNI countries, with a high HDI are positioned on the top right side of the plot and were included at the same cluster.
+
+- Female Education follows the same guidelines. Clearly countries with a higher HDI have a higher Female Education. On the plot, these countries are represented at the same cluster and are mainly on the top right quadrant.
+
+- GNI and Female Education are also represented by the few countries that have both economic power and inclusive education for female citizens. Prevalence on the top right quadrant.
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 library(ggplot2)
@@ -109,5 +234,4 @@ twcss <- sapply(1:k_max, function(k){kmeans(dist, k)$tot.withinss})
 plot(1:k_max, twcss, type='b')
 km <-kmeans(dist, centers = 2)
 pairs(HDI~ (GNI + Exp.Edu + Exp.Life + Female.Edu),data=latam, col = km$cluster, pch = 1, title = "K-Means")
-
 ```
