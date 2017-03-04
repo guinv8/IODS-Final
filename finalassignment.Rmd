@@ -67,7 +67,6 @@ This plot offers us an extremely useful first view of our dataset. It shows the 
 library(corrplot)
 cor_matrix<-cor(latam) 
 corrplot(cor_matrix, method="circle", type= "upper", cl.pos="b", tl.pos="d", tl.cex=0.6, mar = c(3,0,2,0), title= "Correlation Matrix")
-
 ```
 
 ________
@@ -149,7 +148,7 @@ Let's try to find out, using our main dataset, what independent variables are th
 
 *a) Multiple Regression 1: HDI x all variables*
 
-In order to analyse a regression, simple or multiple, it is necessary to understand some of the main elements of the analysis. On the table below, for example, we can notice that three vairables showed to be more significant to predict HDI: Exp. Life, Exp. Edu and GNI. However, even though our r² value, our coefficient of determination, is extremely positive (0.96), meaning that it is almost 100% correct that HDI's movements can be explained by these variables, we still have a lot of unecessary variables that don't necessarily predict our HDI level. Let's take them off one by one and see the changes in our model.
+In order to analyse a regression, simple or multiple, it is necessary to understand some of the main elements of the analysis. On the table below, for example, we can notice that three vairables showed to be more significant to predict HDI: Exp. Life, Exp. Edu and GNI. However, even though our rÂ² value, our coefficient of determination, is extremely positive (0.96), meaning that it is almost 100% correct that HDI's movements can be explained by these variables, we still have a lot of unecessary variables that don't necessarily predict our HDI level. Let's take them off one by one and see the changes in our model.
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 MultipleRegression <- lm(HDI ~ ., data = latam)
@@ -159,7 +158,7 @@ summary(MultipleRegression)
 
 *b)Multiple Regression 2: HDI x all variables (except Male.Edu)*
 
-Male Education was the variable that least predicted our variable, according to the regression analysis. When we remove it from our analysis, it is interesting to notice the rising importance of Female Education to the prediction of HDI. Now we have four main variables that predict HDI movements. Our r² remains high, around 0.96, therefore out regression still predicts almost 100% of our dependent variable. Let's continue removing more variables to simplify our analysis.
+Male Education was the variable that least predicted our variable, according to the regression analysis. When we remove it from our analysis, it is interesting to notice the rising importance of Female Education to the prediction of HDI. Now we have four main variables that predict HDI movements. Our rÂ² remains high, around 0.96, therefore out regression still predicts almost 100% of our dependent variable. Let's continue removing more variables to simplify our analysis.
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 MultipleRegression2 <- lm(HDI ~ . - Male.Edu, data = latam)
@@ -169,7 +168,7 @@ summary(MultipleRegression2)
 
 *c)Multiple Regression 3: HDI x all variables (except Male.Edu and Mat. Mort)*
 
-Maternal Mortality rate was the next less important variable on our previous regression model, therefore I've decided to remove it for the next model. We can clearly see the impact on the variables, and in our r² value, reaching 0.97 now. 
+Maternal Mortality rate was the next less important variable on our previous regression model, therefore I've decided to remove it for the next model. We can clearly see the impact on the variables, and in our rÂ² value, reaching 0.97 now. 
 
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
@@ -180,7 +179,7 @@ summary(MultipleRegression3)
 
 *d)Multiple Regression 4: HDI x all variables (except Male.Edu, Mat. Mort, Adol.Birth)*
 
-The next variable to be removed, according to its importance on the previous regression is Adolescent Birth Rate. Our previous variables still remain with the same importance, but now the analysis is less polluted. Our r² still remais at the same optimal level of 0.97.
+The next variable to be removed, according to its importance on the previous regression is Adolescent Birth Rate. Our previous variables still remain with the same importance, but now the analysis is less polluted. Our rÂ² still remais at the same optimal level of 0.97.
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 MultipleRegression4 <- lm(HDI ~ . - (Male.Edu + Mat.Mort + Adol.Birth), data = latam)
@@ -200,7 +199,7 @@ summary(MultipleRegression5)
 
 *e)Multiple Regression 6: HDI x all variables (except Male.Edu, Mat. Mort, Adol.Birth, Parl, Female.Labor)*
 
-When removing Female Labor, the variable Male Labor is not as relevant as in previous regression models. Our r² is lower but still extremely reliable.
+When removing Female Labor, the variable Male Labor is not as relevant as in previous regression models. Our rÂ² is lower but still extremely reliable.
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 MultipleRegression6 <- lm(HDI ~ . - (Male.Edu + Mat.Mort + Adol.Birth + Parl + Female.Labor), data = latam)
