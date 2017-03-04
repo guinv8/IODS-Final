@@ -12,7 +12,7 @@ output:
     fig_width: 6
     fig_height: 4
     code_folding: hide
-    encoding: UTF-8
+encoding: UTF-8
 ---
 
 ***
