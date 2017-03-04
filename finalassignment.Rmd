@@ -5,6 +5,12 @@ output:
     code_folding: hide
 ---
 
+**Data Wrangling Link:** https://github.com/guinv8/IODS-Final/blob/master/HumanFinal.R
+
+#Abstract
+
+This research has the objective to analyse and explore the Humand Development Index (HDI) of Latin America and the Caribbean. As a region commonly known as unequal and diverse, Latin America has interesting development patterns and structures. The main objective of this research is to find a relationship between female education and a high HDI index, as well as a better economic performance. By using three main statistical techniques: **Linear Discriminant Analysis (LDA), Multiple Regression and K-Means**, the Human Development Index is explored and analysed. As a conclusion, the relationship between variables became clear, yet still dependent on different techniques to show different aspects and connection between them. 
+
 
 #Motivation
 
@@ -19,6 +25,8 @@ The Human Development Index is the most used index to measure human development 
 My objective in this research is to analyze what are the main components that influence a high HDI mark in Latin America and the Caribbean. The region counts with interesting and really diverse countries, ranging from low to high HDIs, different economic structures, different public spendings and different cultural habits. *My main hypotheses is regarding how education, specially female, impacts positively the human development index of these countries*. As a traditionally patriarcal region, poor female citizens still face several challenges when trying to pursue or access education. **I believe that those countries that have a high female education level, count with a higher HDI index, as wel with a more advanced economic structure (GNI)**. I would like to support this hypotheses with economic elements, such as GNI per capita, proving that more equal and prosperous countries have a higher HDI and female education level. 
 
 __________________________________________________________________________________________________________________________
+
+#Analysis
 
 **The dataset *Human*, which is being used for the purpose of this statistical analysis was gathered and processed by the UNDP (United Nations Development Program).**
 **It is the objective of this report to analyse the data through R, with a concise explanation of each step and codes used.**
@@ -235,3 +243,11 @@ plot(1:k_max, twcss, type='b')
 km <-kmeans(dist, centers = 2)
 pairs(HDI~ (GNI + Exp.Edu + Exp.Life + Female.Edu),data=latam, col = km$cluster, pch = 1, title = "K-Means")
 ```
+
+_________
+
+#Conclusion
+
+Latin America is known for being a region characterized by disparities. The exercises and methods used above help us explain and understand interesting development aspects of this region.The Linear Discriminant Analysis, for example, through proper classification and classification, helped us to understand aspects of development that influenced a higher mark on the HDI index. Elements, such as GNI per capita and Exp. Education showed to be the main drivers of a high performance on the HDI index. Female education, however, through this analysis, apparently had no relation to a high HDI performance. It was only through the multiple regression method that we could find a strong relationship between this variable and the HDI index. By measuring the distance between variables, we could see how similar countries in the region really are, proving that the development of the region is still somehow homogeneous, and not totally adverse. 
+
+Overall, I conclude that certain elements, such as GNI per capita and higher Expected Years of Education play a clear role on the human development of these countries. Specific elements, such as female education showed to be essential on the its relation to a high HDI index, but unlike the two previous variables, it possibly impacts on HDI on certain conditions and determinants. Maybe an analysis that would put together male and female education could show a stronger tie to a strong HDI. When it regards to GNI and female education, the K-Means test clearly showed a prevalensce of a high female education on richer and more equal countries, clearly stating that a higher economic power does indeed impact and is impacted by female education.
