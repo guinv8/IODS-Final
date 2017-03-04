@@ -20,7 +20,7 @@ The Human Data, collected by UNDP, holds interesting information on human develo
 
 #Research Question and Hypotheses
 
-The Human Development Index is the most used index to measure human development around the world. Divided into 4 groups (Low,Medium,High,Very High). The index includes several elements, such as: access to education, labor, economic power and health.The HDI index is not the only, and far from the best index, but still is the most used around the world. It lacks explanation in specific measures, such as inequality and freedom, but brings a decent overview of development through sectors.
+The Human Development Index is the most used index to measure human development around the world. Divided into 4 groups (Low,Medium,High,Very High), the index includes several elements, such as: access to education, labor, economic power and health. The HDI is not the only, and far from the best index, but still is the most used around the world. It lacks explanation in specific measures, such as inequality and freedom, but brings a decent overview of development through sectors.
 
 My objective in this research is to analyze what are the main components that influence a high HDI mark in Latin America and the Caribbean. The region counts with interesting and really diverse countries, ranging from low to high HDIs, different economic structures, different public spendings and different cultural habits. *My main hypotheses is regarding how education, specially female, impacts positively the human development index of these countries*. As a traditionally patriarcal region, poor female citizens still face several challenges when trying to pursue or access education. **I believe that those countries that have a high female education level, count with a higher HDI index, as wel with a more advanced economic structure (GNI)**. I would like to support this hypotheses with economic elements, such as GNI per capita, proving that more equal and prosperous countries have a higher HDI and female education level. 
 
@@ -35,7 +35,7 @@ ________________________________________________________________________________
 
 The *Human* data consists of 155 observations within 17 variables. However, for this exercise, I wish to analyse only those countries located in **Latin America and the Caribbean**. The adapted dataset consisting solely of Latin American and Caribbean countries has a total of *28 observations*, including the average regional number, visualized through *11 variables*: HDI (Human Development Index), Expectancy of Life, Expected Education, GNI (Gross National Product), Maternal Mortality, Adolescence Birth Rate, Parliamentary Representation Rate, Female Secondary Education, Male Secondary Education, Female Labor and Male Labor.
 
-It is clear the distance between the first HDI of the Region, held by Argentina, and the last, held by Haiti. As I've mentioned before, the region is known for its disparities. Let's take a look at the Expected Education, by years, the difference between the first and the last country is almost 100%. On the economic side, the same conclusion can be taken, the richest and more equal are very distant from the poorest and unequal. The Mean represent the average numbers for the Region, somehow close to the reality of most of the countries in Latin America and the Caribbean.
+Taking a glimpse at the data below, it is easy to spot the distance between the first HDI of the Region, held by Argentina, and the last, held by Haiti. As I've mentioned before, the region is known for its disparities. Let's take a look at the Expected Education, by years. The difference between the first and the last country is almost 100%. On the economic side, the same conclusion can be taken, as the richest and more equal are very distant from the poorest and unequal. The Mean represent the average numbers for the region, somehow close to the reality of most of the countries in Latin America and the Caribbean.
 
 ```{r, echo=TRUE}
 library(ggplot2)
@@ -55,7 +55,7 @@ Looking at the matrix and the plots below, we can identify and verify the distri
 pairs(latam)
 ```
 
-This plot offers us an extremely useful first view of our dataset. It shows the correlation of each variable, so how each one of the 11 variables relate positively (Blue color) or negatively (Red color), with eachother. Let's take a look at some of them. 
+This plot offers us an extremely useful first view of our dataset. It shows the correlation of each variable: how each one of the 11 variables relate positively (Blue color) or negatively (Red color), with eachother. Let's take a look at some of them. 
 
 - First, taking HDI as our reference, we can see how  Expected Education, for example, contributes positively to the HDI marks, which makes sense as more developed countries count with a higher level of education.
 
@@ -73,14 +73,14 @@ ________
 
 **3) Classifying the HDI**
 
-The Human Development Index was developed by the UNDP in 1990 by several development scientists who wished to change the focus of development from economics to people. Since then the index has suffered several changes, on its structure and methods to classify the countries, but finally in 2010, the UNDP set up fixed cut-lines to define the level in which the country would be classified. The cut lines would still be divided in four, but instead of being floating up and down accoridng to new reports, they would now be fixed intervals.
+The Human Development Index was developed by the UNDP in 1990 by several development scientists who wished to change the focus of development from economics to people. Since then the index has suffered several changes on its structure and methods to classify the countries, but finally in 2010, the UNDP set up fixed cut-lines to define the level in which the individual country would be classified. The cut lines would still be divided in four, but instead of being floating up and down according to new reports, they would now be determined by fixed intervals.
 
 - Very High Human Development: 0.800 and above
 - High Human Development: 0.700 - 0.799
 - Medium Human Development: 0.550 - 0.699
 - Low Human Development: Below 0.550
 
-In order to use the same patterns defined by the UN, I've categorized the 28 HDI's being analysed in this report within the 4 UNDP's classification groups. We can then see that among the Latin American countries, two are within the "very high" group, most of the countries are at the "high" human development group, seven are at the "medium" group, and only one is within the "low" HDI classification. This classification will be extremely important in our further analysis. 
+In order to use the same patterns defined by the UN, I've categorized the 28 HDI's being analysed in this report within the 4 UNDP's classification groups. We can then see that among Latin American countries, two are within the "very high" group, most of the countries are in the "high" human development group, seven are in the "medium" group, and only one is within the "low" HDI classification. This classification will be extremely important in our further analysis. 
 
 ```{r, echo=TRUE}
 hdi <- cut(latam$HDI, breaks = c(0, 0.550, 0.699, 0.799, 1.000), include.lowest = TRUE, label = c("low", "medium", "high", "very_high"))
@@ -92,13 +92,13 @@ _______
 
 **4) Linear Discriminant Analysis**
 
-The first method in which I wish to analyse my data is through a Linear Discriminan Analysis (LDA). LDA is a classifying technique, which aims to categorize observations based on the variables that describe them. LDA is a technique that permits the researcher to study differences between two or more groups of objects, while considering th variables simultaneously. The idea of LDA is not to establish a group of objects, only to give interpretation on a set previously defined.
+The first method in which I wish to analyse my data is through a Linear Discriminan Analysis (LDA). LDA is a classification technique, which aims to categorize observations based on the variables that describe them. LDA is a technique that permits the researcher to study differences between two or more groups of objects, while considering variables simultaneously. The idea of LDA is not to establish a group of objects, but to give an interpretation on a set previously defined.
 
-LDA is a great method to analyse our data through the use of our recent created IDH classes. But first, a standardization of the data is necessary, since the dimensions of our variables are really different in nature and in form.
+LDA is a great method to analyse our data through the use of our recent created HDI classes. But first, a standardization of the data is necessary, since the dimensions of our variables are really different in nature and in form.
 
 *Standardizing the data*
 
-By using the standardization technique, it is possible to analyse all variables through the same comparison format. On the table below, it is possible to see all of our 11 variables being shown through the same form.
+By using the standardization technique, it is possible to analyse all variables through the same comparison format. On the table below, it is possible to see all of our 11 variables being shown through the same standard.
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 latam_scaled <- scale(latam)
@@ -109,7 +109,7 @@ latam_scaled <- cbind(latam_scaled, hdi)
 
 Finally, let's analyse the data through the LDA technique. We can clearly see that the four groups previously classified are the main core of this method. For obvious reasons, I've removed the HDI numbers, and left only the four categories, as I wish to see the data only through these four groups, at first. The table below is extremely useful to show us the powerful importance of the several dimensions within our data. Out of the three dimensions (LDA1,LDA2,LDA3), it is clear the importance and significance of the first dimension when explaining our data. According to the LDA method, the first dimension can explain almost 80% of all our data, while the second dimension, about 20%. The third dimension showed to be insignificant.
 
-Let's take a closer look at the variables themselves. The graph below shows, through the two most important dimensions identified before (LDA1 and LDA2), and through arrows, how each variable reacts through the dimensions, contributing or not to the final HDI classification. Very High Human Development countries are positioned on the right side of the graph, while Medium and High Development countries are scattered around the middle, and the only Low is isolated on the top left side. Overall we can assume that the more developed the country, the more far right it is located on the graph. Now let's take a look at the arrows, each one represents a different variable, and their direction shows its impact on bringing the country, or object, further right,left,up or down within the dimensions. Going back to our previous research question and hypotheses, and according to this LDA we can conclude that:
+Let's take a closer look at the variables themselves. The graph below shows, through the two most important dimensions identified before (LDA1 and LDA2), and through arrows, how each variable reacts through the dimensions, contributing or not to the final HDI classification. Very High Human Development countries are positioned on the right side of the graph, while Medium and High Development countries are scattered around the middle, and the only Low is isolated on the top left side. Overall we can assume that the more developed the country, the more far right it is located on the plot. Now let's take a look at the arrows, each one represents a different variable, and their direction shows its impact on bringing the country, or object, further right,left,up or down within the dimensions. Going back to our previous research question and hypotheses, and according to this LDA we can conclude that:
 
 - Expected Years of Education has direct relation with the development of these countries. We can assume that analysing the direction of the arrow, pointing towards the right, supporting the first dimension (LDA1) positively. We can see that a more extense education plays a big role on the development of these countries.
 
@@ -141,14 +141,14 @@ _________
 
 **5) Multiple Regression**
 
-Regression analysis is a process for estimating the relationship between variables. Regressions can be simple or multiple, as it analyses one or more variables. The main idea of a multiple regression, for example, is to find the best independent variables that predict our dependent variable. In other words, how one or more variables predict one specific variable within our data frame. 
+Regression analysis is a process of estimating the relationship between variables. Regressions can be simple or multiple, as it analyses one or more variables. The main idea of a multiple regression, for example, is to find the best independent variables that predict a dependent variable. In other words, how one or more variables predict one specific variable within a data frame. 
 This is extremely useful to find out how strong related the variables are.
 
-Let's try to find out, using our main dataset, what independent variables are the most relevant to predict our dependent variable HDI.
+Let's try to find out, using our main dataset, what independent variables are the most relevant to predict our dependent variable, HDI.
 
 *a) Multiple Regression 1: HDI x all variables*
 
-In order to analyse a regression, simple or multiple, it is necessary to understand some of the main elements of the analysis. On the table below, for example, we can notice that three vairables showed to be more significant to predict HDI: Exp. Life, Exp. Edu and GNI. However, even though our r² value, our coefficient of determination, is extremely positive (0.96), meaning that it is almost 100% correct that HDI's movements can be explained by these variables, we still have a lot of unecessary variables that don't necessarily predict our HDI level. Let's take them off one by one and see the changes in our model.
+In order to analyse a regression, simple or multiple, it is necessary to understand some of the main elements of the analysis. On the table below, for example, we can notice that three variables showed to be more significant to predict HDI: Exp. Life, Exp. Edu and GNI. However, even though our r² value, our coefficient of determination, is extremely positive (0.96), meaning that it is almost 100% correct that HDI's movements can be explained by these variables, we still have several unecessary variables on our regression analysis. Let's take them off one by one and see the changes in our model.
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 MultipleRegression <- lm(HDI ~ ., data = latam)
@@ -158,7 +158,7 @@ summary(MultipleRegression)
 
 *b)Multiple Regression 2: HDI x all variables (except Male.Edu)*
 
-Male Education was the variable that least predicted our variable, according to the regression analysis. When we remove it from our analysis, it is interesting to notice the rising importance of Female Education to the prediction of HDI. Now we have four main variables that predict HDI movements. Our r² remains high, around 0.96, therefore out regression still predicts almost 100% of our dependent variable. Let's continue removing more variables to simplify our analysis.
+Male Education was the variable that least predicted our variable, according to the regression analysis. When we remove it from our analysis, it is interesting to notice the rising importance of Female Education to the prediction of HDI. Now we have four main variables that predict HDI movements. Our r² remains high, around 0.96, therefore our regression still predicts almost 100% of our dependent variable. Let's continue removing more variables to simplify our analysis.
 
 ```{r, echo=TRUE, message=FALSE, warning=FALSE}
 MultipleRegression2 <- lm(HDI ~ . - Male.Edu, data = latam)
@@ -220,7 +220,7 @@ ____________
 
 **6) Distance between variables - K Means**
 
-Now that we have some information regarding the variables and its relationship with HDI, it would be interesting to see how the countries in the region are similar or not in each of the main identified variables. This would be interesting to see in which aspect countries are more homogeneous, and in which aspects they are more distinct. In order to do that, we need to perform a clustering technique that will separate each country according to the closest mean on each of the variables. We are doing that through the K-Means clustering method.
+Now that we have some information regarding the variables and its relationship with HDI, it would be interesting to see how the countries in the region are similar or not in each of the main identified variables. It is then possible to identify in which aspects countries are more homogeneous, and in which aspects they are more distinct. In order to do that, we need to perform a clustering technique that will separate each country according to the closest mean on each of our variables. We are doing that through the K-Means clustering method.
 
 The first step, however, is to find the optimal amount of centroids, or centers. This will define the amount of closest means to our variables. According to the first graph, in which we "try" the optimal amount of centroids, it is possible to see a great difference between two centroids and the rest. This bigger difference means that two centroids are probably the most effective way to cluster the data.
 
@@ -249,4 +249,4 @@ _________
 
 Latin America is known for being a region characterized by disparities. The exercises and methods used above help us explain and understand interesting development aspects of this region.The Linear Discriminant Analysis, for example, through proper classification and classification, helped us to understand aspects of development that influenced a higher mark on the HDI index. Elements, such as GNI per capita and Exp. Education showed to be the main drivers of a high performance on the HDI index. Female education, however, through this analysis, apparently had no relation to a high HDI performance. It was only through the multiple regression method that we could find a strong relationship between this variable and the HDI index. By measuring the distance between variables, we could see how similar countries in the region really are, proving that the development of the region is still somehow homogeneous, and not totally adverse. 
 
-Overall, I conclude that certain elements, such as GNI per capita and higher Expected Years of Education play a clear role on the human development of these countries. Specific elements, such as female education showed to be essential on the its relation to a high HDI index, but unlike the two previous variables, it possibly impacts on HDI on certain conditions and determinants. Maybe an analysis that would put together male and female education could show a stronger tie to a strong HDI. When it regards to GNI and female education, the K-Means test clearly showed a prevalensce of a high female education on richer and more equal countries, clearly stating that a higher economic power does indeed impact and is impacted by female education.
+Overall, I conclude that certain elements, such as GNI per capita and higher Expected Years of Education play a clear role on the human development of these countries. Specific elements, such as female education showed to be essential on its relation to a high HDI index, but unlike the two previous variables, it possibly impacts on HDI on certain conditions and determinants. Maybe an analysis that would put together male and female education could show a stronger tie to a strong HDI. When it regards to GNI and female education, the K-Means test clearly showed a prevalence of a high female education on richer and more equal countries, clearly stating that a higher economic power does indeed impact, and is impacted, by female education.
